@@ -1,0 +1,42 @@
+<%- include('partials/layout-start', { active, searchQuery }) %>
+<section class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="font-semibold">Ricerca globale</h2>
+    <form method="get" action="/search" class="flex flex-col sm:flex-row gap-2 w-full">
+      <label class="text-xs font-semibold text-slate-600 w-full sm:w-auto">Cerca
+        <input name="q" value="<%= q || '' %>" class="mt-1 rounded border border-slate-200 px-3 py-2 w-full sm:w-auto">
+      </label>
+      <button class="px-4 py-2 rounded bg-ink text-white w-full sm:w-auto self-end sm:self-auto">Cerca</button>
+    </form>
+  </div>
+
+  <% if (!q) { %>
+    <p class="text-slate-500 text-sm">Digita qualcosa e premi invio.</p>
+  <% } else if (results.length === 0) { %>
+    <p class="text-slate-500 text-sm">Nessun risultato.</p>
+  <% } else { %>
+    <ul class="space-y-3">
+      <% results.forEach(r => { 
+        const anchor = r.entity === 'todos' ? '/todos#todo-' + r.item_id
+          : r.entity === 'notes' ? '/notes#note-' + r.item_id
+          : r.entity === 'reminders' ? '/reminders#reminder-' + r.item_id
+          : '/links#link-' + r.item_id
+      %>
+        <li class="border border-slate-200 rounded-lg p-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-wide text-slate-500"><%= r.entity %></p>
+              <a href="<%= anchor %>" class="font-semibold text-sky-700"><%= r.title %></a>
+            </div>
+            <a href="<%= anchor %>" class="text-sm text-sky-700">apri →</a>
+          </div>
+          <% if (r.snippet) { %>
+            <p class="text-sm text-slate-700 mt-1"><%- r.snippet %></p>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</section>
+
+<%- include('partials/layout-end') %>

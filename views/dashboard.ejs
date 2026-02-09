@@ -1,0 +1,108 @@
+<%- include('partials/layout-start', { active, searchQuery }) %>
+<section id="quick-add" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+  <div class="flex items-start justify-between mb-2 gap-3">
+    <div>
+      <p class="text-xs uppercase tracking-wide text-slate-500">Quick add</p>
+      <h2 class="text-lg font-semibold">Scrivi e capisce da sola</h2>
+    </div>
+    <span class="text-xs text-slate-500 text-right max-w-[180px] hidden sm:block">es: "todo compra latte domani 18:00 #spesa"</span>
+  </div>
+  <form action="/quick-add" method="post" class="flex flex-col gap-2 sm:flex-row">
+    <label for="quick-text" class="text-xs font-semibold text-slate-600">Testo comando</label>
+    <div class="flex flex-col sm:flex-row gap-2">
+      <input id="quick-text" name="text" required autofocus class="flex-1 rounded-lg border border-slate-200 px-3 py-2 focus:ring focus:ring-accent/30" placeholder="todo compra latte domani 18:00 #spesa">
+      <button class="px-4 py-2 rounded-lg bg-accent text-white hover:bg-sky-500">Aggiungi</button>
+    </div>
+  </form>
+</section>
+
+<div class="grid gap-4 lg:grid-cols-2">
+  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-semibold">Todo in scadenza</h3>
+      <a href="/todos" class="text-sm text-sky-600">vai</a>
+    </div>
+    <% if (upcomingTodos.length === 0) { %>
+      <p class="text-slate-500 text-sm">Nessun task in scadenza. Aggiungi un todo dal quick add.</p>
+    <% } else { %>
+      <ul class="space-y-2">
+        <% upcomingTodos.forEach(t => { %>
+          <li class="border border-slate-200 rounded-lg px-3 py-2 flex items-center justify-between">
+            <div>
+              <p class="font-medium"><%= t.title %></p>
+              <p class="text-xs text-slate-500">Scade: <%= t.due_date ? new Date(t.due_date).toLocaleString() : '-' %></p>
+            </div>
+            <form action="/todos/<%= t.id %>/status" method="post">
+              <input type="hidden" name="status" value="done">
+              <button class="text-xs px-3 py-1 rounded bg-emerald-100 text-emerald-700">Completa</button>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-semibold">Promemoria imminenti</h3>
+      <a href="/reminders" class="text-sm text-sky-600">vai</a>
+    </div>
+    <% if (upcomingReminders.length === 0) { %>
+      <p class="text-slate-500 text-sm">Nessun promemoria imminente. Crea un promemoria veloce.</p>
+    <% } else { %>
+      <ul class="space-y-2">
+        <% upcomingReminders.forEach(r => { %>
+          <li class="border border-slate-200 rounded-lg px-3 py-2 flex items-center justify-between">
+            <div>
+              <p class="font-medium"><%= r.title %></p>
+              <p class="text-xs text-slate-500">Quando: <%= r.remind_at ? new Date(r.remind_at).toLocaleString() : 'nessuna data' %></p>
+            </div>
+            <form action="/reminders/<%= r.id %>/toggle" method="post">
+              <button class="text-xs px-3 py-1 rounded bg-slate-800 text-white">Fatto</button>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-semibold">Ultime note</h3>
+      <a href="/notes" class="text-sm text-sky-600">vai</a>
+    </div>
+    <% if (latestNotes.length === 0) { %>
+      <p class="text-slate-500 text-sm">Nessuna nota. Premi “n” o usa il pulsante +.</p>
+    <% } else { %>
+      <ul class="space-y-2">
+        <% latestNotes.forEach(n => { %>
+          <li class="border border-slate-200 rounded-lg px-3 py-2">
+            <p class="font-medium"><%= n.title %></p>
+            <p class="text-xs text-slate-500">Aggiornata: <%= new Date(n.updated_at).toLocaleString() %></p>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-semibold">Link salvati</h3>
+      <a href="/links" class="text-sm text-sky-600">vai</a>
+    </div>
+    <% if (latestLinks.length === 0) { %>
+      <p class="text-slate-500 text-sm">Ancora nessun link. Salva un URL dal form Link.</p>
+    <% } else { %>
+      <ul class="space-y-2">
+        <% latestLinks.forEach(l => { %>
+          <li class="border border-slate-200 rounded-lg px-3 py-2">
+            <p class="font-medium truncate"><a href="<%= l.url %>" class="text-sky-700" target="_blank" rel="noreferrer"><%= l.title || l.url %></a></p>
+            <p class="text-xs text-slate-500 truncate"><%= l.url %></p>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/layout-end') %>
