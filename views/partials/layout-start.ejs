@@ -43,6 +43,135 @@
       .topbar .add-btn { width: auto; padding-inline: 0.9rem; }
       button, input, textarea, select { min-height: 42px; }
     }
+
+    @media (min-width: 1024px) {
+      :root {
+        --shell-max: 1640px;
+        --shell-gutter: 28px;
+        --section-pad: 24px;
+        --section-gap: 24px;
+        --card-pad: 16px;
+      }
+
+      header .topbar,
+      main {
+        max-width: var(--shell-max);
+        width: 100%;
+        margin-inline: auto;
+        padding-inline: var(--shell-gutter);
+      }
+
+      main {
+        padding-block: 32px 44px;
+      }
+
+      main > * + * {
+        margin-top: var(--section-gap);
+      }
+
+      main section.bg-white {
+        padding: var(--section-pad);
+        border-radius: 16px;
+      }
+
+      main h2 {
+        font-size: 1.4rem;
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+      }
+
+      main h3 {
+        font-size: 1.15rem;
+        line-height: 1.35;
+      }
+
+      main p {
+        line-height: 1.6;
+      }
+
+      main .grid.gap-4 {
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      }
+
+      main .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: 1rem;
+      }
+
+      main form {
+        row-gap: 1rem;
+        column-gap: 1.25rem;
+      }
+
+      main li.border,
+      main article.border {
+        padding: var(--card-pad) calc(var(--card-pad) + 2px);
+      }
+
+      main form {
+        width: 100%;
+      }
+
+      main form input[type=\"text\"],
+      main form input[type=\"search\"],
+      main form input[type=\"url\"],
+      main form input[type=\"datetime-local\"],
+      main form textarea {
+        width: min(100%, 720px);
+        flex: 1 1 520px;
+      }
+
+      main form select {
+        min-width: 220px;
+      }
+
+      main form.flex-wrap input,
+      main form.flex-wrap select {
+        flex: 0 1 260px;
+        min-width: 0;
+        max-width: 360px;
+        width: auto;
+      }
+
+      /* Inputs lead; buttons support */
+      main form button {
+        width: auto;
+        max-width: 240px;
+        flex: 0 0 auto;
+        padding-inline: 0.95rem;
+      }
+
+      /* Notes: content dominant, tags comfortable */
+      #new form textarea {
+        min-height: 220px;
+      }
+      #new form input[name="tags"] {
+        flex: 0 1 380px;
+      }
+
+      /* Desktop search/filter bars: inputs 60–70% */
+      main form input[type="search"] {
+        flex-basis: 65%;
+      }
+
+      /* Avoid full-width buttons on desktop */
+      main form button.w-full,
+      main form button.sm\\:w-auto,
+      main form button.sm\\:self-auto {
+        width: auto;
+      }
+
+      main form .flex-1,
+      main form .w-full {
+        width: 100%;
+      }
+
+      .add-btn,
+      button {
+        min-height: 44px;
+        padding-inline: 1.1rem;
+      }
+    }
   </style>
 </head>
 <body class="bg-cloud text-ink">
