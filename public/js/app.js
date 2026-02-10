@@ -43,4 +43,19 @@
       if (window.innerWidth < 640) closeSidebar()
     })
   })
+
+  // Ricorrente toggle: mostra/nasconde pannello in /todos
+  const recurringToggle = document.getElementById('recurring-toggle')
+  const recurringFields = document.getElementById('recurring-fields')
+  if (recurringToggle && recurringFields) {
+    const sync = () => {
+      if (recurringToggle.checked) {
+        recurringFields.classList.remove('hidden')
+      } else {
+        recurringFields.classList.add('hidden')
+      }
+    }
+    recurringToggle.addEventListener('change', sync)
+    sync()
+  }
 })()

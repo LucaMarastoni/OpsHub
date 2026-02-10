@@ -23,6 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Manrope', system-ui, sans-serif; }
+    html, body { height: 100%; }
     html { font-size: 15px; }
     @media (max-width: 640px) {
       html { font-size: 16px; }
@@ -38,10 +39,18 @@
         box-shadow: 0 10px 30px rgba(15,23,42,0.25);
       }
       #sidebar.open { transform: translateX(0); }
+      #sidebar { position: fixed; }
       .topbar { gap: 0.5rem; align-items: stretch; }
       .topbar form { flex: 1; }
       .topbar .add-btn { width: auto; padding-inline: 0.9rem; }
       button, input, textarea, select { min-height: 42px; }
+    }
+
+    /* Base dashboard stack: consistent spacing also su mobile */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 1rem;
     }
 
     @media (min-width: 1024px) {
@@ -91,7 +100,6 @@
 
       main .grid.gap-4 {
         gap: 1.5rem;
-        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
       }
 
       main .space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -131,6 +139,94 @@
         min-width: 0;
         max-width: 360px;
         width: auto;
+      }
+
+      /* Dashboard: fixed 12-col grid; equal widths per tier */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+      .dashboard-grid > * { min-height: 230px; }
+      #quick-add {
+        grid-column: 1 / -1;
+        padding: 32px;
+        border-color: #dbe3f0;
+        box-shadow: 0 14px 36px rgba(15, 23, 42, 0.06);
+      }
+      #quick-add h2 {
+        font-size: 1.65rem;
+        letter-spacing: -0.012em;
+      }
+      #quick-add form {
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 0.85rem 1.1rem;
+      }
+      #quick-add form > label {
+        flex: 0 0 150px;
+      }
+      #quick-add form > div {
+        flex: 1 1 640px;
+        display: flex;
+        gap: 0.85rem;
+        align-items: flex-end;
+      }
+      #quick-add input {
+        min-height: 56px;
+        font-size: 1.02rem;
+      }
+      #quick-add button {
+        min-height: 56px;
+        padding-inline: 1.2rem;
+      }
+      /* Card spans by tier: one primary, peers share width */
+      .card-primary { grid-column: 1 / -1; }
+      .card-secondary { grid-column: span 6; }
+      .card-tertiary { grid-column: span 6; }
+
+      @media (max-width: 1199px) {
+        .card-secondary,
+        .card-tertiary {
+          grid-column: span 12;
+        }
+      }
+
+      /* Card presence */
+      .card {
+        padding: 22px;
+        border-radius: 18px;
+        border-color: #d7deeb;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+      }
+      .card h3 {
+        font-size: 1.2rem;
+        letter-spacing: -0.01em;
+      }
+
+      /* CTA: same action => same skin (avoids random colors) */
+      .card-cta,
+      .card-cta--primary,
+      .card-cta--secondary,
+      .card-cta--tertiary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.5rem 1.1rem;
+        border-radius: 999px;
+        font-weight: 600;
+        color: #0b1224;
+        background: linear-gradient(180deg, #d8ecff, #b9ddff);
+        border: 1px solid #0ea5e9;
+        box-shadow: 0 10px 24px rgba(14, 165, 233, 0.18);
+        transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+      }
+      .card-cta:hover,
+      .card-cta--primary:hover,
+      .card-cta--secondary:hover,
+      .card-cta--tertiary:hover {
+        background: #a8cffc;
+        box-shadow: 0 10px 28px rgba(14, 165, 233, 0.22);
       }
 
       /* Inputs lead; buttons support */
@@ -175,9 +271,9 @@
   </style>
 </head>
 <body class="bg-cloud text-ink">
-  <div class="min-h-screen flex">
+  <div class="min-h-screen flex overflow-hidden">
     <div id="sidebar-backdrop" class="sm:hidden hidden fixed inset-0 bg-slate-900/30 z-30"></div>
-    <aside id="sidebar" class="w-64 bg-white border-r border-slate-200 hidden sm:block">
+    <aside id="sidebar" class="w-64 bg-white border-r border-slate-200 hidden sm:block sticky top-0 h-screen overflow-y-auto">
       <div class="p-4 flex items-center justify-between border-b border-slate-200">
         <div class="font-semibold text-lg">Ops Hub</div>
         <span class="text-xs px-2 py-1 bg-slate-100 rounded">local</span>
@@ -192,7 +288,7 @@
       </nav>
     </aside>
 
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col min-h-screen max-h-screen overflow-hidden">
       <header class="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-slate-200">
         <div class="topbar flex items-center gap-3 px-4 py-3">
           <button id="sidebar-toggle" class="sm:hidden inline-flex items-center justify-center w-10 h-10 rounded border border-slate-200">☰</button>
@@ -202,4 +298,4 @@
           <a href="/dashboard#quick-add" class="add-btn inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-ink text-white hover:bg-slate-900">+ Aggiungi</a>
         </div>
       </header>
-      <main class="p-4 md:p-6 space-y-4">
+      <main class="p-4 md:p-6 space-y-4 overflow-y-auto">

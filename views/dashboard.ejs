@@ -16,11 +16,11 @@
   </form>
 </section>
 
-<div class="grid gap-4 lg:grid-cols-2">
-  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+<div class="dashboard-grid">
+  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm card card-secondary">
     <div class="flex items-center justify-between mb-3">
       <h3 class="font-semibold">Todo in scadenza</h3>
-      <a href="/todos" class="text-sm text-sky-600">vai</a>
+      <a href="/todos" class="card-cta text-sm">vai</a>
     </div>
     <% if (upcomingTodos.length === 0) { %>
       <p class="text-slate-500 text-sm">Nessun task in scadenza. Aggiungi un todo dal quick add.</p>
@@ -42,10 +42,10 @@
     <% } %>
   </div>
 
-  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm card card-secondary">
     <div class="flex items-center justify-between mb-3">
       <h3 class="font-semibold">Promemoria imminenti</h3>
-      <a href="/reminders" class="text-sm text-sky-600">vai</a>
+      <a href="/reminders" class="card-cta text-sm">vai</a>
     </div>
     <% if (upcomingReminders.length === 0) { %>
       <p class="text-slate-500 text-sm">Nessun promemoria imminente. Crea un promemoria veloce.</p>
@@ -66,10 +66,10 @@
     <% } %>
   </div>
 
-  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm card card-tertiary">
     <div class="flex items-center justify-between mb-3">
       <h3 class="font-semibold">Ultime note</h3>
-      <a href="/notes" class="text-sm text-sky-600">vai</a>
+      <a href="/notes" class="card-cta text-sm">vai</a>
     </div>
     <% if (latestNotes.length === 0) { %>
       <p class="text-slate-500 text-sm">Nessuna nota. Premi “n” o usa il pulsante +.</p>
@@ -85,10 +85,10 @@
     <% } %>
   </div>
 
-  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm card card-tertiary">
     <div class="flex items-center justify-between mb-3">
       <h3 class="font-semibold">Link salvati</h3>
-      <a href="/links" class="text-sm text-sky-600">vai</a>
+      <a href="/links" class="card-cta text-sm">vai</a>
     </div>
     <% if (latestLinks.length === 0) { %>
       <p class="text-slate-500 text-sm">Ancora nessun link. Salva un URL dal form Link.</p>

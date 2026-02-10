@@ -40,6 +40,29 @@ function setupDatabase (db) {
       updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
     );
 
+    /* Ricorrenze todo: definizione + occorrenze generate on-demand */
+    CREATE TABLE IF NOT EXISTS todo_schedules (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      repeats_per_day INTEGER NOT NULL CHECK(repeats_per_day > 0 AND repeats_per_day <= 12),
+      total_days INTEGER NOT NULL CHECK(total_days > 0 AND total_days <= 60),
+      start_date TEXT NOT NULL,
+      wake_start TEXT NOT NULL DEFAULT '09:00',
+      wake_end TEXT NOT NULL DEFAULT '21:00',
+      custom_times TEXT DEFAULT NULL, -- JSON array HH:MM
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS todo_occurrences (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      schedule_id INTEGER NOT NULL REFERENCES todo_schedules(id) ON DELETE CASCADE,
+      day_date TEXT NOT NULL, -- yyyy-mm-dd
+      slot_time TEXT NOT NULL, -- HH:MM
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','done')),
+      done_at TEXT,
+      UNIQUE(schedule_id, day_date, slot_time)
+    );
+
     CREATE TABLE IF NOT EXISTS links (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       url TEXT NOT NULL,
@@ -57,6 +80,8 @@ function setupDatabase (db) {
     CREATE INDEX IF NOT EXISTS idx_reminders_done ON reminders(done);
     CREATE INDEX IF NOT EXISTS idx_reminders_remind_at ON reminders(remind_at);
     CREATE INDEX IF NOT EXISTS idx_links_url ON links(url);
+    CREATE INDEX IF NOT EXISTS idx_todo_occ_day ON todo_occurrences(day_date);
+    CREATE INDEX IF NOT EXISTS idx_todo_occ_schedule ON todo_occurrences(schedule_id);
   `)
 
   try {

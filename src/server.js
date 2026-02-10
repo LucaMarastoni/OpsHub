@@ -6,6 +6,7 @@ const morgan = require('morgan')
 const basicAuth = require('basic-auth')
 const rateLimit = require('express-rate-limit')
 const { createDb, isFtsEnabled } = require('./db')
+const dayjs = require('dayjs')
 
 const db = createDb()
 const app = express()
@@ -45,6 +46,7 @@ app.use(maybeAuth)
 
 // share helpers
 app.locals.isFtsEnabled = isFtsEnabled
+app.locals.dayjs = dayjs
 
 // routes
 app.use('/', require('./routes/dashboard')(db))
